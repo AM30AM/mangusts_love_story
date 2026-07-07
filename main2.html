@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mangusts Love Story</title>
+    <link rel="stylesheet" href="css/main1.css">
+    <link rel="stylesheet" href="css/main2.css">
+</head>
+<body>
+    <div class="flowers-top"><img src="img/flowers_1.png" alt=""></div>
+
+    <div class="block-nach">
+        <h3 class="left">06.06.2022 <br> День рождения</h3>
+        <div class="block_inside">
+            <p class="text">День рождения Екатерины или день Х. Этот прекрасный день Катя решила отметить с Андреем и пойти гулять. Отлично 
+                проводя время вместе, Катя тихо призналась в своих чувствах. К большому счастью, Андрей услышал её и ответил 
+                взаимностью. Вот так начался их путь к большой и серьезной любви. </p>
+            <img src="img/mangusts.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="flowers"></div>
+
+    <div class="block_inside-chine">
+        <img src="img/chine.png" alt="" class="chine">
+        <p class="text">для них стало больше, чем просто "Я тебя люблю"</p>
+    </div>
+
+    <div class="flowers"></div>
+
+    <div class="block">
+        <h3 class="photo_gallery">ФОТОПЛЕНКА</h3>
+    </div>
+
+    <div class="gallery" id="gallery">
+    <div class="viewport" id="viewport">
+    <div class="track" id="track">
+      <div class="slide"><img src="img/mangusts1.jpg" alt="1"></div>
+      <div class="slide"><img src="img/mangusts2.jpg" alt="2"></div>
+      <div class="slide"><video src="img/man.mp4" loop controls></video></div>
+      <div class="slide"><img src="img/mangusts3.jpg" alt="3"></div>
+      <div class="slide"><img src="img/mangusts4.jpg" alt="4"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="prev" aria-label="prev">◀</button>
+      <button class="btn" id="next" aria-label="next">▶</button>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="info"></div>
+    <div class="dots" id="dots"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const track = document.getElementById('track');
+  const slides = Array.from(track.children);
+  const prev = document.getElementById('prev'), next = document.getElementById('next');
+  const dotsWrap = document.getElementById('dots');
+  let idx = 0;
+
+  // create dots
+  slides.forEach((_, i)=>{
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.addEventListener('click', ()=>go(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function update(){
+    const w = track.clientWidth;
+    track.style.transform = `translateX(${-idx * w}px)`;
+    dots.forEach((d,i)=>d.classList.toggle('active', i===idx));
+    // pause other videos
+    slides.forEach((s,i)=>{
+      const v = s.querySelector('video');
+      if(v) {
+        if(i===idx) { /* keep controls visible */ } else { v.pause(); v.currentTime = 0; }
+      }
+    });
+  }
+
+  function go(i){
+    idx = (i + slides.length) % slides.length;
+    update();
+  }
+  function nextSlide(){ go(idx+1) }
+  function prevSlide(){ go(idx-1) }
+
+  prev.addEventListener('click', prevSlide);
+  next.addEventListener('click', nextSlide);
+  window.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') nextSlide(); if(e.key==='ArrowLeft') prevSlide(); });
+
+  // simple touch (swipe)
+  let startX = 0;
+  const vp = document.getElementById('viewport');
+  vp.addEventListener('touchstart', e=> startX = e.touches[0].clientX, {passive:true});
+  vp.addEventListener('touchend', e=>{
+    const dx = (e.changedTouches[0].clientX - startX);
+    if(dx > 40) prevSlide(); else if(dx < -40) nextSlide();
+    startX = 0;
+  });
+
+  // responsive: recalc transform on resize
+  window.addEventListener('resize', update);
+
+  // init
+  go(0);
+})();
+</script>
+    
+    <div class="flowers"></div>
+
+    <div class="block">
+        <h3 class="left">08.07.2025 <br> День росписи</h3>
+        <div class="block_inside">
+            <img src="img/mangust5.jpg" alt="">
+            <p class="text">За несколько лет отношений они поняли, что хотят быть друг для друга большим, быть вместе
+                и в горе, и в радости. Их любовь стала не просто чувством, а 
+                силой, позволяющей преодолевать трудности. Андрей и Катя стали мужем и женой. Поэтому никогда 
+                не бойтесь искрене любить и выходить из привычной и комфортной жизни. Ведь кто знает как одна встреча
+                или день могут изменить судьбу. </p>
+        </div>
+    </div>
+
+    <div class="flowers"></div>
+
+    <div class="button">
+            <a href="main3.html" class="next">Далее</a>
+    </div>
+</body>
+</html>

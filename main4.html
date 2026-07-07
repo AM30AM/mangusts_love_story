@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mangusts Love Story</title>
+    <link rel="stylesheet" href="css/main1.css">
+    <link rel="stylesheet" href="css/main3.css">
+</head>
+<body>
+    <div class="date">18.07.2025 <br> <span class="day">Wedding day</span></div>
+    
+    <div class="flowers"></div>
+
+    <div class="walking">Свадебный вечер</div>
+
+    <div class="gallery" id="gallery">
+  <div class="viewport" id="viewport">
+    <div class="track" id="track">
+      <!-- Слайды: замените src на ваши пути; для видео используйте <video> -->
+      <div class="slide" data-type="image" data-title="photo1">
+        <img src="img/w_1.jpg" alt="photo1">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo2">
+        <img src="img/w_2.jpg" alt="photo2">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo3">
+        <!-- Видео вставляем прямо; controls будут показаны при воспроизведении -->
+        <img src="img/w_3.jpg" alt="photo3">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo4">
+        <img src="img/w_5.jpg" alt="photo4">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo5">
+        <img src="img/w_6.jpg" alt="photo5">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo6">
+        <img src="img/w_7.jpg" alt="photo6">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo7">
+        <img src="img/w_8.jpg" alt="photo7">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo8">
+        <img src="img/w_9.jpg" alt="photo8">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo9">
+        <img src="img/w_10.jpg" alt="photo9">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo10">
+        <img src="img/w_11.jpg" alt="photo10">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo11">
+        <img src="img/w_12.jpg" alt="photo11">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo12">
+        <img src="img/w_13.jpg" alt="photo12">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo13">
+        <img src="img/w_14.jpg" alt="photo13">
+      </div>
+
+      <div class="slide" data-type="image" data-title="photo14">
+        <img src="img/w_15.jpg" alt="photo14">
+      </div>
+      
+      <!-- Добавляйте слайды по образцу -->
+    </div>
+
+    <div class="controls" aria-hidden="false">
+      <button class="btn" id="prevBtn" title="Назад" aria-label="Previous">
+        <!-- svg стрелка -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button class="btn" id="nextBtn" title="Вперёд" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="thumbs" id="thumbs">
+      <!-- thumbnails создаются автоматически скриптом -->
+    </div>
+
+    <div class="actions">
+      <button class="toggle" id="autoplay">Автоплей: выкл</button>
+      <!--<div style="color:var(--muted); font-size:13px; padding-left:6px"> ←/→, swipe, клики по миниатюрам</div>-->
+    </div>
+  </div>
+</div>
+
+    <div class="flowers"></div>
+    <div class="dance">
+      <div class="walking">Танец жениха и невесты</div>
+       <video src="img/dance.mp4" preload="metadata" controls playsinline></video>
+    </div>
+    <div class="flowers"></div>
+
+    <div class="walking"></div>
+<script>
+  (function(){
+    const track = document.getElementById('track');
+    const slides = Array.from(track.children);
+    const thumbsContainer = document.getElementById('thumbs');
+    const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn');
+    const autoplayBtn = document.getElementById('autoplay');
+    let index = 0;
+    let autoplay = false;
+    let autoplayTimer = null;
+
+    // Создаём миниатюры из слайдов
+    slides.forEach((slide, i) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb';
+      thumb.dataset.index = i;
+
+      // если слайд содержит видео — копируем video, иначе img
+      if(slide.dataset.type === 'video') {
+        const vid = slide.querySelector('video');
+        if(vid){
+          const clone = document.createElement('video');
+          clone.src = vid.getAttribute('src');
+          clone.muted = true; clone.playsInline = true; clone.loop = true;
+          clone.autoplay = true;
+          clone.style.objectFit = 'cover';
+          thumb.appendChild(clone);
+        }
+      } else {
+        const img = slide.querySelector('img');
+        if(img){
+          const clone = document.createElement('img');
+          clone.src = img.getAttribute('src');
+          clone.alt = img.alt || '';
+          thumb.appendChild(clone);
+        }
+      }
+
+      thumb.addEventListener('click', () => goTo(i));
+      thumbsContainer.appendChild(thumb);
+    });
+
+    const thumbElems = Array.from(thumbsContainer.children);
+
+    function update(){
+      const offset = -index * track.clientWidth;
+      track.style.transform = `translateX(${offset}px)`;
+      thumbElems.forEach(t=>t.classList.remove('active'));
+      thumbElems[index] && thumbElems[index].classList.add('active');
+
+      // если на текущем слайде видео — показываем controls и автозапуск не мешает
+      slides.forEach((s, i) => {
+        const video = s.querySelector('video');
+        if(video){
+          if(i === index){
+            // не автозапускаем фоновые видео, оставляем controls
+            // video.play() вызываем только если хотим автоплей для видео
+            video.controls = true;
+          } else {
+            video.pause();
+            video.currentTime = 0;
+            video.controls = false;
+          }
+        }
+      });
+    }
+
+    function goTo(i){
+      index = (i + slides.length) % slides.length;
+      update();
+      resetAutoplay();
+    }
+    function next(){ goTo(index+1); }
+    function prev(){ goTo(index-1); }
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    // keyboard
+    window.addEventListener('keydown', e => {
+      if(e.key === 'ArrowRight') next();
+      if(e.key === 'ArrowLeft') prev();
+    });
+
+    // swipe support
+    let startX = null, isDragging = false;
+    const vp = document.getElementById('viewport');
+    vp.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+    }, {passive:true});
+    vp.addEventListener('touchmove', e => {
+      if(startX === null) return;
+      const dx = e.touches[0].clientX - startX;
+      if(Math.abs(dx) > 50){
+        if(dx < 0) next(); else prev();
+        startX = null;
+      }
+    }, {passive:true});
+    vp.addEventListener('touchend', ()=> startX=null);
+
+    // mouse drag for desktop (optional)
+    let dragStart = null;
+    vp.addEventListener('mousedown', e => { dragStart = e.clientX; });
+    vp.addEventListener('mouseup', e => {
+      if(dragStart === null) return;
+      const dx = e.clientX - dragStart;
+      if(Math.abs(dx) > 80) dx < 0 ? next() : prev();
+      dragStart = null;
+    });
+
+    // Автоплей
+    function setAutoplay(on){
+      autoplay = !!on;
+      autoplayBtn.textContent = `Автоплей: ${autoplay ? 'вкл' : 'выкл'}`;
+      if(autoplay){
+        autoplayTimer = setInterval(next, 3500);
+      } else {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+    autoplayBtn.addEventListener('click', () => setAutoplay(!autoplay));
+
+    function resetAutoplay(){
+      if(autoplay){
+        clearInterval(autoplayTimer);
+        autoplayTimer = setInterval(next, 3500);
+      }
+    }
+
+    // responsive: при изменении ширины пересчитываем смещение
+    new ResizeObserver(() => update()).observe(track);
+
+    // инициализация
+    goTo(0);
+    // можно включить автоплей по умолчанию:
+    // setAutoplay(true);
+
+  })();
+</script>
+
+</body>
+</html>
