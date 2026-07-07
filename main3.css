@@ -51,7 +51,7 @@ body {
     will-change:transform;
   }
   .slide {
-    max-width: 100%; min-width:99.9%; height: 40vh; min-height: 40vh;user-select:none; display:flex; align-items:center; justify-content:center;
+    max-width: 100%; min-width:99.9%; height: 459.59; min-height: 40vh;user-select:none; display:flex; align-items:center; justify-content:center;
     position:relative; padding:0px; 
   }
   .slide img, .slide video{
