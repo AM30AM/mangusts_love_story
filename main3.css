@@ -36,7 +36,7 @@ body {
 }
 
 .gallery {
-    width:100%; max-width:30vh; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
+    width:100%; max-width: 344.69px; height: 597.89px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
     border-radius:12px; padding:10px; box-shadow:0 8px 30px rgba(2,6,23,0.7);
     display:flex; gap:var(--gap); flex-direction:column; margin-left: 12px;
   }
